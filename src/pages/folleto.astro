@@ -536,7 +536,7 @@ const qrBase = 'https://api.qrserver.com/v1/create-qr-code/?size=220x220&margin=
 	@media print {
 		:global(html),
 		:global(body:has(.flyer-page)) {
-			width: 210mm;
+			width: 100%;
 			height: 297mm;
 			min-height: 297mm;
 			overflow: hidden;
@@ -548,8 +548,9 @@ const qrBase = 'https://api.qrserver.com/v1/create-qr-code/?size=220x220&margin=
 		}
 
 		.flyer-page {
-			display: block;
-			width: 210mm;
+			display: grid;
+			place-items: start center;
+			width: 100%;
 			height: 297mm;
 			min-height: 297mm;
 			padding: 0;
@@ -557,10 +558,10 @@ const qrBase = 'https://api.qrserver.com/v1/create-qr-code/?size=220x220&margin=
 		}
 
 		.flyer-sheet {
-			width: 210mm;
+			width: min(196mm, 100%);
 			min-height: 297mm;
 			height: 297mm;
-			margin: 0;
+			margin: 0 auto;
 			gap: 14px;
 			padding: 11mm;
 			box-shadow: none;
