@@ -13,6 +13,7 @@ const requiredMessages = {
 	nombre: 'Ingresá tu nombre y apellido.',
 	correo: 'Ingresá un correo válido.',
 	cuil: 'Ingresá tu CUIL/CUIT sin guiones.',
+	reparticion: 'Seleccioná la repartición.',
 	telefonoContacto: 'Ingresá un teléfono de contacto.',
 	tipoLinea: 'Seleccioná el tipo de línea.',
 	numeroLineaRobada: 'Ingresá el número de línea robada.',
@@ -48,6 +49,7 @@ function setError(fieldName, message) {
 function clearErrors() {
 	Object.keys(requiredMessages).forEach((fieldName) => setError(fieldName, ''));
 	setError('otraMarca', '');
+	setError('otraReparticion', '');
 }
 
 function getFiles() {
@@ -107,6 +109,10 @@ function validate(payload, files) {
 		errors.cuil = 'El CUIL/CUIT debe tener exactamente 11 números.';
 	}
 
+	if (payload.reparticion === 'Otro' && !payload.otraReparticion) {
+		errors.otraReparticion = 'Indicá la repartición.';
+	}
+
 	if (payload.telefonoContacto && !validatePhone(payload.telefonoContacto)) {
 		errors.telefonoContacto = 'Ingresá un teléfono válido.';
 	}
@@ -142,6 +148,8 @@ function payloadFromForm() {
 		nombre: getValue(formData, 'nombre'),
 		correo: getValue(formData, 'correo'),
 		cuil: getValue(formData, 'cuil'),
+		reparticion: getValue(formData, 'reparticion'),
+		otraReparticion: getValue(formData, 'otraReparticion'),
 		telefonoContacto: getValue(formData, 'telefonoContacto'),
 		tipoLinea: getValue(formData, 'tipoLinea'),
 		numeroLineaRobada: getValue(formData, 'numeroLineaRobada'),
@@ -251,6 +259,22 @@ async function submitDenuncia(payload) {
 
 if (form) {
 	const fileInput = form.elements.denunciaArchivos;
+	const reparticionSelect = form.elements.reparticion;
+	const otraReparticionField = form.querySelector('[data-reparticion-other]');
+	const otraReparticionInput = form.elements.otraReparticion;
+
+	function syncOtraReparticion() {
+		const isOther = reparticionSelect.value === 'Otro';
+		otraReparticionField?.classList.toggle('is-hidden', !isOther);
+		otraReparticionInput.required = isOther;
+		if (!isOther) {
+			otraReparticionInput.value = '';
+			setError('otraReparticion', '');
+		}
+	}
+
+	reparticionSelect?.addEventListener('change', syncOtraReparticion);
+	syncOtraReparticion();
 
 	fileInput?.addEventListener('change', () => {
 		const files = getFiles();
@@ -304,7 +328,7 @@ if (form) {
 			showSuccessModal({
 				title: 'Denuncia enviada',
 				message: 'Recibimos la documentación correctamente.',
-				detail: `ID: ${result.idDenuncia}`,
+				detail: `ID de denuncia: ${result.idDenuncia}`,
 			});
 		} catch (error) {
 			closeLoadingModal(loadingModal);

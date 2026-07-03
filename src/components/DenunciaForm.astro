@@ -1,5 +1,6 @@
 ---
 const marcas = ['Samsung', 'Motorola', 'Otro'];
+const reparticiones = ['DGATBPCM', 'DGIINSO', 'EXAU3', 'SSATO', 'UEEXAU3', 'Otro'];
 const tiposLinea = ['Línea de Gobierno', 'Línea de Empresa', 'No lo sé'];
 ---
 
@@ -36,6 +37,21 @@ const tiposLinea = ['Línea de Gobierno', 'Línea de Empresa', 'No lo sé'];
 						required
 					/>
 					<small data-error-for="cuil"></small>
+				</label>
+
+				<label class="field">
+					<span>Repartición *</span>
+					<select name="reparticion" required>
+						<option value="">Seleccionar</option>
+						{reparticiones.map((reparticion) => <option value={reparticion}>{reparticion}</option>)}
+					</select>
+					<small data-error-for="reparticion"></small>
+				</label>
+
+				<label class="field reparticion-other-field is-hidden" data-reparticion-other>
+					<span>Otra repartición *</span>
+					<input type="text" name="otraReparticion" maxlength="80" />
+					<small data-error-for="otraReparticion"></small>
 				</label>
 
 				<label class="field">

@@ -24,6 +24,7 @@ const requiredMessages = {
 	nombre: 'Ingresá tu nombre y apellido.',
 	correo: 'Ingresá un correo válido.',
 	cuil: 'Ingresá un CUIL/CUIT con 11 números.',
+	reparticion: 'Seleccioná la repartición.',
 	tipoSolicitud: 'Seleccioná el tipo de solicitud.',
 	equipo: 'Seleccioná el equipo involucrado.',
 	fechaTurno: 'Seleccioná una fecha hábil desde hoy en adelante.',
@@ -62,6 +63,7 @@ function setError(fieldName, message) {
 
 function clearErrors() {
 	Object.keys(requiredMessages).forEach((fieldName) => setError(fieldName, ''));
+	setError('otraReparticion', '');
 }
 
 function isValidEmail(email) {
@@ -92,6 +94,10 @@ function validate(payload) {
 		errors.cuil = 'El CUIL/CUIT debe tener exactamente 11 números.';
 	}
 
+	if (payload.reparticion === 'Otro' && !payload.otraReparticion) {
+		errors.otraReparticion = 'Indicá la repartición.';
+	}
+
 	if (payload.fechaTurno && payload.fechaTurno < todayIsoDate()) {
 		errors.fechaTurno = 'La fecha no puede ser anterior a hoy.';
 	}
@@ -114,6 +120,8 @@ function payloadFromForm() {
 		nombre: getValue(formData, 'nombre'),
 		correo: getValue(formData, 'correo'),
 		cuil: getValue(formData, 'cuil'),
+		reparticion: getValue(formData, 'reparticion'),
+		otraReparticion: getValue(formData, 'otraReparticion'),
 		tipoSolicitud: getValue(formData, 'tipoSolicitud'),
 		equipo: getValue(formData, 'equipo'),
 		descripcion: getValue(formData, 'descripcion'),
@@ -203,6 +211,23 @@ async function submitTurno(payload) {
 
 if (form) {
 	form.elements.fechaTurno.min = todayIsoDate();
+
+	const reparticionSelect = form.elements.reparticion;
+	const otraReparticionField = form.querySelector('[data-reparticion-other]');
+	const otraReparticionInput = form.elements.otraReparticion;
+
+	function syncOtraReparticion() {
+		const isOther = reparticionSelect.value === 'Otro';
+		otraReparticionField?.classList.toggle('is-hidden', !isOther);
+		otraReparticionInput.required = isOther;
+		if (!isOther) {
+			otraReparticionInput.value = '';
+			setError('otraReparticion', '');
+		}
+	}
+
+	reparticionSelect?.addEventListener('change', syncOtraReparticion);
+	syncOtraReparticion();
 
 	form.addEventListener('submit', async (event) => {
 		event.preventDefault();

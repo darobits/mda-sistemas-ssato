@@ -29,6 +29,8 @@ const TURNOS_HEADERS = [
   'Correo',
   'Es Gmail',
   'CUIL/CUIT',
+  'Repartición',
+  'Otra repartición',
   'Tipo de solicitud',
   'Equipo',
   'Descripción',
@@ -45,6 +47,8 @@ const DENUNCIAS_HEADERS = [
   'Nombre y apellido',
   'Correo',
   'CUIL/CUIT',
+  'Repartición',
+  'Otra repartición',
   'Teléfono de contacto',
   'Tipo de línea',
   'Número de línea robada',
@@ -90,6 +94,8 @@ function handleTurno(payload) {
       data.correo,
       isGmail ? 'Sí' : 'No',
       data.cuil,
+      data.reparticion,
+      data.otraReparticion,
       data.tipoSolicitud,
       data.equipo,
       data.descripcion,
@@ -125,6 +131,8 @@ function handleDenuncia(payload) {
       data.nombre,
       data.correo,
       data.cuil,
+      data.reparticion,
+      data.otraReparticion,
       data.telefonoContacto,
       data.tipoLinea,
       data.numeroLineaRobada,
@@ -146,6 +154,8 @@ function validateTurnoPayload(payload) {
     nombre: String(payload.nombre || '').trim(),
     correo: String(payload.correo || '').trim(),
     cuil: String(payload.cuil || '').trim(),
+    reparticion: String(payload.reparticion || '').trim(),
+    otraReparticion: String(payload.otraReparticion || '').trim(),
     tipoSolicitud: String(payload.tipoSolicitud || '').trim(),
     equipo: String(payload.equipo || '').trim(),
     descripcion: String(payload.descripcion || '').trim(),
@@ -153,9 +163,13 @@ function validateTurnoPayload(payload) {
     horaTurno: String(payload.horaTurno || '').trim(),
   };
 
-  requireFields(data, ['nombre', 'correo', 'cuil', 'tipoSolicitud', 'equipo', 'fechaTurno', 'horaTurno']);
+  requireFields(data, ['nombre', 'correo', 'cuil', 'reparticion', 'tipoSolicitud', 'equipo', 'fechaTurno', 'horaTurno']);
   validateEmail(data.correo);
   validateCuil(data.cuil);
+
+  if (data.reparticion === 'Otro' && !data.otraReparticion) {
+    throw new Error('Indicá la repartición.');
+  }
 
   const today = new Date();
   today.setHours(0, 0, 0, 0);
@@ -181,6 +195,8 @@ function validateDenunciaPayload(payload) {
     nombre: String(payload.nombre || '').trim(),
     correo: String(payload.correo || '').trim(),
     cuil: String(payload.cuil || '').trim(),
+    reparticion: String(payload.reparticion || '').trim(),
+    otraReparticion: String(payload.otraReparticion || '').trim(),
     telefonoContacto: String(payload.telefonoContacto || '').trim(),
     tipoLinea: String(payload.tipoLinea || '').trim(),
     numeroLineaRobada: String(payload.numeroLineaRobada || '').trim(),
@@ -194,6 +210,7 @@ function validateDenunciaPayload(payload) {
     'nombre',
     'correo',
     'cuil',
+    'reparticion',
     'telefonoContacto',
     'tipoLinea',
     'numeroLineaRobada',
@@ -201,6 +218,10 @@ function validateDenunciaPayload(payload) {
   ]);
   validateEmail(data.correo);
   validateCuil(data.cuil);
+
+  if (data.reparticion === 'Otro' && !data.otraReparticion) {
+    throw new Error('Indicá la repartición.');
+  }
 
   if (data.marcaCelular === 'Otro' && !data.otraMarca) {
     throw new Error('Indicá la marca del celular.');
@@ -293,9 +314,15 @@ function getSheet(sheetName, headers) {
 
   if (sheet.getLastRow() === 0) {
     sheet.appendRow(headers);
+  } else {
+    syncHeaders(sheet, headers);
   }
 
   return sheet;
+}
+
+function syncHeaders(sheet, headers) {
+  sheet.getRange(1, 1, 1, headers.length).setValues([headers]);
 }
 
 function nextId(sheet, prefix) {
@@ -349,6 +376,7 @@ function createCalendarEvent(data, idTurno, isGmail) {
     `Solicitante: ${data.nombre}`,
     `Correo: ${data.correo}`,
     `CUIL/CUIT: ${data.cuil}`,
+    `Repartición: ${data.reparticion}${data.otraReparticion ? ' - ' + data.otraReparticion : ''}`,
     `Tipo de solicitud: ${data.tipoSolicitud}`,
     `Equipo: ${data.equipo}`,
     `Descripción: ${data.descripcion || 'Sin descripción'}`,
