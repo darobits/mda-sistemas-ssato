@@ -844,6 +844,67 @@ textarea:focus {
 	line-height: 1.35;
 }
 
+.file-selection-list {
+	display: none;
+	margin-top: 8px;
+	border: 1px solid rgba(0, 168, 135, 0.26);
+	border-radius: 8px;
+	background: rgba(255, 255, 255, 0.86);
+	padding: 9px 11px;
+	color: #102033;
+	box-shadow: 0 8px 22px rgba(16, 32, 51, 0.08);
+}
+
+.file-selection-list:not(:empty) {
+	display: block;
+}
+
+.file-selection-list strong {
+	display: block;
+	margin-bottom: 6px;
+	color: #007a64;
+	font-size: 0.82rem;
+	font-weight: 950;
+	letter-spacing: 0.03em;
+	text-transform: uppercase;
+}
+
+.file-selection-list ul {
+	display: grid;
+	gap: 5px;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.file-selection-list li {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 10px;
+	min-width: 0;
+	border-radius: 6px;
+	background: rgba(232, 244, 251, 0.9);
+	padding: 7px 9px;
+	font-size: 0.82rem;
+	font-weight: 850;
+}
+
+.file-selection-list li span {
+	overflow: hidden;
+	min-width: 0;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.file-selection-list li em {
+	flex: 0 0 auto;
+	color: #5d7185;
+	font-size: 0.75rem;
+	font-style: normal;
+	font-weight: 900;
+}
+
 .field small {
 	min-height: 11px;
 	color: #bd2f49;
@@ -1064,6 +1125,15 @@ button:disabled {
 	padding: 20px;
 	background: rgba(3, 10, 18, 0.72);
 	backdrop-filter: blur(10px);
+}
+
+.success-modal.timed-modal {
+	pointer-events: none;
+}
+
+.success-modal.timed-modal .success-modal-card {
+	width: min(360px, 92vw);
+	transform: translateY(-8px);
 }
 
 .success-modal-card {

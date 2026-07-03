@@ -71,6 +71,15 @@ function formatBytes(bytes) {
 	return `${(bytes / (1024 * 1024)).toFixed(bytes >= 1024 * 1024 ? 1 : 2)} MB`;
 }
 
+function escapeHtml(value) {
+	return String(value)
+		.replace(/&/g, '&amp;')
+		.replace(/</g, '&lt;')
+		.replace(/>/g, '&gt;')
+		.replace(/"/g, '&quot;')
+		.replace(/'/g, '&#039;');
+}
+
 function isAllowedFile(file) {
 	const mimeType = String(file.type || '').toLowerCase();
 	const extension = getFileExtension(file.name);
@@ -226,6 +235,21 @@ function showMessageModal({ title, message, detail }) {
 	modal.querySelector('button')?.addEventListener('click', () => modal.remove());
 }
 
+function showTimedModal({ title, message, detail, type = 'success', timeout = 1800 }) {
+	const modal = document.createElement('div');
+	modal.className = 'success-modal timed-modal';
+	modal.innerHTML = `
+		<div class="success-modal-card" role="status" aria-live="polite">
+			<div class="success-modal-icon ${type === 'warning' ? 'is-warning' : ''}" aria-hidden="true">${type === 'warning' ? '!' : '✓'}</div>
+			<h2>${title}</h2>
+			<p>${message}</p>
+			${detail ? `<small>${detail}</small>` : ''}
+		</div>
+	`;
+	document.body.appendChild(modal);
+	window.setTimeout(() => modal.remove(), timeout);
+}
+
 function showLoadingModal(message) {
 	const modal = document.createElement('div');
 	modal.className = 'success-modal loading-modal';
@@ -286,9 +310,38 @@ async function submitDenuncia(payload) {
 
 if (form) {
 	const fileInput = form.elements.denunciaArchivos;
+	const fileDropzone = form.querySelector('.file-dropzone');
+	const fileList = form.querySelector('[data-file-list]');
 	const reparticionSelect = form.elements.reparticion;
 	const otraReparticionField = form.querySelector('[data-reparticion-other]');
 	const otraReparticionInput = form.elements.otraReparticion;
+
+	function renderFileList(files) {
+		fileDropzone?.classList.toggle('has-files', files.length > 0);
+
+		if (!fileList) return;
+
+		if (files.length === 0) {
+			fileList.innerHTML = '';
+			return;
+		}
+
+		fileList.innerHTML = `
+			<strong>${files.length === 1 ? 'Archivo cargado' : 'Archivos cargados'}</strong>
+			<ul>
+				${files
+					.map(
+						(file) => `
+							<li>
+								<span>${escapeHtml(file.name)}</span>
+								<em>${formatBytes(file.size)}</em>
+							</li>
+						`,
+					)
+					.join('')}
+			</ul>
+		`;
+	}
 
 	function syncOtraReparticion() {
 		const isOther = reparticionSelect.value === 'Otro';
@@ -308,6 +361,8 @@ if (form) {
 		const fileErrors = getFilesError(files);
 
 		if (fileErrors) {
+			fileInput.value = '';
+			renderFileList([]);
 			setError('denunciaArchivos', fileErrors);
 			showMessageModal({
 				title: 'Revisá el archivo',
@@ -317,7 +372,13 @@ if (form) {
 			return;
 		}
 
+		renderFileList(files);
 		setError('denunciaArchivos', '');
+		showTimedModal({
+			title: 'Archivo cargado',
+			message: files.length === 1 ? 'La denuncia quedó adjuntada al formulario.' : 'Los archivos quedaron adjuntados al formulario.',
+			detail: `${files.length} ${files.length === 1 ? 'archivo seleccionado' : 'archivos seleccionados'}.`,
+		});
 	});
 
 	form.addEventListener('submit', async (event) => {
@@ -358,6 +419,7 @@ if (form) {
 			const archivos = await Promise.all(files.map(fileToPayload));
 			const result = await submitDenuncia({ ...payload, archivos });
 			form.reset();
+			renderFileList([]);
 			closeLoadingModal(loadingModal);
 			showSuccessModal({
 				title: 'Denuncia enviada',
