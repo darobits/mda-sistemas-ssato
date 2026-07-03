@@ -1,4 +1,18 @@
 const enhancedSelects = new Set();
+const enhancedDateInputs = new Set();
+const enhancedFileInputs = new Set();
+
+const CHEVRON_ICON = `
+	<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+		<path d="M7.22 9.47a.75.75 0 0 1 1.06 0L12 13.19l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0l-4.25-4.25a.75.75 0 0 1 0-1.06Z"></path>
+	</svg>
+`;
+
+const CALENDAR_ICON = `
+	<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+		<path d="M7.75 2.75a.75.75 0 0 1 .75.75V5h7V3.5a.75.75 0 0 1 1.5 0V5h1.25A2.75 2.75 0 0 1 21 7.75v10.5A2.75 2.75 0 0 1 18.25 21H5.75A2.75 2.75 0 0 1 3 18.25V7.75A2.75 2.75 0 0 1 5.75 5H7V3.5a.75.75 0 0 1 .75-.75ZM4.5 10v8.25c0 .69.56 1.25 1.25 1.25h12.5c.69 0 1.25-.56 1.25-1.25V10h-15Zm1.25-3.5c-.69 0-1.25.56-1.25 1.25V8.5h15v-.75c0-.69-.56-1.25-1.25-1.25H17V7a.75.75 0 0 1-1.5 0v-.5h-7V7A.75.75 0 0 1 7 7v-.5H5.75Z"></path>
+	</svg>
+`;
 
 function closeAllSelects(except) {
 	document.querySelectorAll('.custom-select.is-open').forEach((select) => {
@@ -28,7 +42,7 @@ function enhanceSelect(select) {
 	const icon = document.createElement('span');
 	icon.className = 'custom-select-icon';
 	icon.setAttribute('aria-hidden', 'true');
-	icon.textContent = 'v';
+	icon.innerHTML = CHEVRON_ICON;
 
 	const list = document.createElement('div');
 	list.className = 'custom-select-list';
@@ -107,8 +121,13 @@ function formatDateLabel(value) {
 }
 
 function enhanceDateInput(input) {
-	if (input.dataset.enhancedDate === 'true') return;
+	if (enhancedDateInputs.has(input)) return;
+	enhancedDateInputs.add(input);
 	input.dataset.enhancedDate = 'true';
+
+	if (!input.min) {
+		input.min = isoDate(new Date());
+	}
 
 	const wrapper = document.createElement('div');
 	wrapper.className = 'date-picker';
@@ -125,7 +144,7 @@ function enhanceDateInput(input) {
 	const icon = document.createElement('span');
 	icon.className = 'date-picker-icon';
 	icon.setAttribute('aria-hidden', 'true');
-	icon.textContent = 'cal';
+	icon.innerHTML = CALENDAR_ICON;
 
 	const panel = document.createElement('div');
 	panel.className = 'date-picker-panel';
@@ -241,7 +260,8 @@ function enhanceDateInput(input) {
 }
 
 function enhanceFileInput(input) {
-	if (input.dataset.enhancedFile === 'true') return;
+	if (enhancedFileInputs.has(input)) return;
+	enhancedFileInputs.add(input);
 	input.dataset.enhancedFile = 'true';
 
 	const field = input.closest('.file-field');
@@ -268,9 +288,17 @@ function enhanceFileInput(input) {
 	updateSummary();
 }
 
-document.querySelectorAll('select').forEach(enhanceSelect);
-document.querySelectorAll('input[type="date"]').forEach(enhanceDateInput);
-document.querySelectorAll('input[type="file"]').forEach(enhanceFileInput);
+function initUiControls() {
+	document.querySelectorAll('select').forEach(enhanceSelect);
+	document.querySelectorAll('input[type="date"]').forEach(enhanceDateInput);
+	document.querySelectorAll('input[type="file"]').forEach(enhanceFileInput);
+}
+
+if (document.readyState === 'loading') {
+	document.addEventListener('DOMContentLoaded', initUiControls, { once: true });
+} else {
+	initUiControls();
+}
 
 document.addEventListener('click', (event) => {
 	if (!event.target.closest('.custom-select')) closeAllSelects();

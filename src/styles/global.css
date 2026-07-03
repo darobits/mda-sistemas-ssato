@@ -592,6 +592,13 @@ textarea:focus {
 	text-transform: uppercase;
 }
 
+.custom-select-icon svg,
+.date-picker-icon svg {
+	width: 18px;
+	height: 18px;
+	fill: currentColor;
+}
+
 .custom-select-list,
 .date-picker-panel {
 	position: absolute;
