@@ -27,8 +27,18 @@ body {
 	display: flex;
 	flex-direction: column;
 	background:
-		linear-gradient(rgba(6, 19, 33, 0.84), rgba(6, 19, 33, 0.84)),
-		url('/exterior-ministerio.png') center 54% / min(980px, 72vw) auto no-repeat fixed,
+		linear-gradient(rgba(6, 19, 33, 0.82), rgba(6, 19, 33, 0.82)),
+		url('/exterior-ministerio.png') center center / cover no-repeat fixed,
+		radial-gradient(circle at 15% 12%, rgba(0, 185, 214, 0.14), transparent 24rem),
+		radial-gradient(circle at 80% 20%, rgba(34, 197, 148, 0.1), transparent 28rem),
+		linear-gradient(135deg, #071322 0%, #081522 48%, #061811 100%);
+}
+
+body:has(.turnos-shell),
+body:has(.denuncia-shell) {
+	background:
+		linear-gradient(rgba(6, 19, 33, 0.78), rgba(6, 19, 33, 0.78)),
+		url('/oficina-ministerio.png') center center / cover no-repeat fixed,
 		radial-gradient(circle at 15% 12%, rgba(0, 185, 214, 0.14), transparent 24rem),
 		radial-gradient(circle at 80% 20%, rgba(34, 197, 148, 0.1), transparent 28rem),
 		linear-gradient(135deg, #071322 0%, #081522 48%, #061811 100%);
@@ -154,20 +164,23 @@ a {
 .turnos-intro,
 .denuncia-intro {
 	display: grid;
-	grid-template-columns: minmax(0, auto) minmax(300px, 1fr);
-	align-items: end;
-	gap: 18px 32px;
+	grid-template-columns: 1fr;
+	align-items: start;
+	gap: 5px;
+	max-width: 760px;
+	padding: 4px 0 2px;
+	text-shadow: 0 2px 18px rgba(0, 0, 0, 0.55);
 }
 
 .turnos-intro .eyebrow,
 .denuncia-intro .eyebrow {
-	grid-column: 1;
-	margin-bottom: -4px;
+	grid-column: auto;
+	margin-bottom: 0;
 }
 
 .turnos-intro h1,
 .denuncia-intro h1 {
-	grid-column: 1;
+	grid-column: auto;
 	margin-bottom: 0;
 	font-size: clamp(1.55rem, 2.45vw, 2.05rem);
 	line-height: 1.04;
@@ -176,9 +189,9 @@ a {
 
 .turnos-intro p:not(.eyebrow),
 .denuncia-intro p {
-	grid-column: 2;
-	grid-row: 1 / span 2;
-	max-width: 520px;
+	grid-column: auto;
+	grid-row: auto;
+	max-width: 640px;
 	margin-bottom: 0;
 	color: #cfe2f3;
 	font-size: 0.82rem;
@@ -187,7 +200,7 @@ a {
 }
 
 .denuncia-intro strong {
-	grid-column: 1 / -1;
+	grid-column: auto;
 	color: #9ee2ff;
 	font-size: 0.8rem;
 	line-height: 1.35;
@@ -1207,7 +1220,17 @@ button:disabled {
 	body {
 		background:
 			linear-gradient(rgba(6, 19, 33, 0.9), rgba(6, 19, 33, 0.9)),
-			url('/exterior-ministerio.png') center 92px / auto 520px no-repeat,
+			url('/exterior-ministerio.png') center center / cover no-repeat,
+			radial-gradient(circle at 14% 8%, rgba(0, 185, 214, 0.16), transparent 18rem),
+			radial-gradient(circle at 80% 18%, rgba(34, 197, 148, 0.12), transparent 22rem),
+			linear-gradient(135deg, #071322 0%, #081522 48%, #061811 100%);
+	}
+
+	body:has(.turnos-shell),
+	body:has(.denuncia-shell) {
+		background:
+			linear-gradient(rgba(6, 19, 33, 0.86), rgba(6, 19, 33, 0.86)),
+			url('/oficina-ministerio.png') center center / cover no-repeat,
 			radial-gradient(circle at 14% 8%, rgba(0, 185, 214, 0.16), transparent 18rem),
 			radial-gradient(circle at 80% 18%, rgba(34, 197, 148, 0.12), transparent 22rem),
 			linear-gradient(135deg, #071322 0%, #081522 48%, #061811 100%);
