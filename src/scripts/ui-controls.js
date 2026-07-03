@@ -178,12 +178,16 @@ function enhanceDateInput(input) {
 		next.textContent = '>';
 		next.setAttribute('aria-label', 'Mes siguiente');
 
-		prev.addEventListener('click', () => {
+		prev.addEventListener('click', (event) => {
+			event.preventDefault();
+			event.stopPropagation();
 			viewDate = new Date(year, month - 1, 1);
 			renderCalendar();
 		});
 
-		next.addEventListener('click', () => {
+		next.addEventListener('click', (event) => {
+			event.preventDefault();
+			event.stopPropagation();
 			viewDate = new Date(year, month + 1, 1);
 			renderCalendar();
 		});
