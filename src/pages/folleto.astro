@@ -10,7 +10,8 @@ const qrBase = 'https://api.qrserver.com/v1/create-qr-code/?size=220x220&margin=
 <Layout>
 	<main class="flyer-page">
 		<div class="print-actions" aria-hidden="true">
-			<button type="button" onclick="window.print()">Imprimir folleto</button>
+			<p>Para imprimir limpio: en "Más ajustes", desactivá "Encabezados y pies de página".</p>
+			<button type="button" data-print-flyer>Imprimir folleto</button>
 		</div>
 
 		<section class="flyer-sheet" aria-label="Folleto Mesa de Ayuda SSATO">
@@ -112,6 +113,22 @@ const qrBase = 'https://api.qrserver.com/v1/create-qr-code/?size=220x220&margin=
 	</main>
 </Layout>
 
+<script>
+	const printButton = document.querySelector('[data-print-flyer]');
+	const originalTitle = document.title;
+
+	function printCleanFlyer() {
+		document.title = ' ';
+		window.print();
+	}
+
+	window.addEventListener('afterprint', () => {
+		document.title = originalTitle;
+	});
+
+	printButton?.addEventListener('click', printCleanFlyer);
+</script>
+
 <style>
 	:global(body:has(.flyer-page)) {
 		background:
@@ -131,9 +148,19 @@ const qrBase = 'https://api.qrserver.com/v1/create-qr-code/?size=220x220&margin=
 	}
 
 	.print-actions {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 16px;
 		width: min(210mm, 100%);
 		margin-bottom: 12px;
-		text-align: right;
+		color: #071322;
+	}
+
+	.print-actions p {
+		margin: 0;
+		font-size: 0.9rem;
+		font-weight: 850;
 	}
 
 	.print-actions button {
