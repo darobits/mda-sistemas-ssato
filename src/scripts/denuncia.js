@@ -2,6 +2,7 @@ import { APPS_SCRIPT_URL } from './config.js';
 
 const MAX_FILES = 5;
 const MAX_FILE_SIZE = 10 * 1024 * 1024;
+const MAX_TOTAL_FILE_SIZE = 25 * 1024 * 1024;
 const PDF_EXTENSIONS = ['pdf'];
 const IMAGE_EXTENSIONS = ['jpg', 'jpeg', 'png', 'webp', 'gif', 'bmp', 'tif', 'tiff', 'heic', 'heif', 'avif'];
 
@@ -65,6 +66,11 @@ function getFileExtension(fileName) {
 	return String(fileName || '').split('.').pop().toLowerCase();
 }
 
+function formatBytes(bytes) {
+	if (!Number.isFinite(bytes) || bytes <= 0) return '0 MB';
+	return `${(bytes / (1024 * 1024)).toFixed(bytes >= 1024 * 1024 ? 1 : 2)} MB`;
+}
+
 function isAllowedFile(file) {
 	const mimeType = String(file.type || '').toLowerCase();
 	const extension = getFileExtension(file.name);
@@ -86,6 +92,36 @@ function getMimeType(file) {
 	if (IMAGE_EXTENSIONS.includes(extension)) return `image/${extension === 'jpg' ? 'jpeg' : extension}`;
 
 	return 'application/octet-stream';
+}
+
+function getFilesError(files) {
+	if (files.length === 0) {
+		return 'Adjuntá la denuncia policial.';
+	}
+
+	if (files.length > MAX_FILES) {
+		return `Podés adjuntar hasta ${MAX_FILES} archivos. Seleccionaste ${files.length}.`;
+	}
+
+	const invalidFile = files.find((file) => !isAllowedFile(file));
+
+	if (invalidFile) {
+		return `El archivo "${invalidFile.name}" no es válido. Solo se aceptan PDF o imágenes.`;
+	}
+
+	const oversizedFile = files.find((file) => file.size > MAX_FILE_SIZE);
+
+	if (oversizedFile) {
+		return `El archivo "${oversizedFile.name}" pesa ${formatBytes(oversizedFile.size)}. Máximo permitido: ${formatBytes(MAX_FILE_SIZE)}.`;
+	}
+
+	const totalSize = files.reduce((total, file) => total + file.size, 0);
+
+	if (totalSize > MAX_TOTAL_FILE_SIZE) {
+		return `Los archivos pesan ${formatBytes(totalSize)} en total. Para evitar errores de carga, el máximo total es ${formatBytes(MAX_TOTAL_FILE_SIZE)}.`;
+	}
+
+	return '';
 }
 
 function validate(payload, files) {
@@ -125,17 +161,8 @@ function validate(payload, files) {
 		errors.otraMarca = 'Indicá la marca del celular.';
 	}
 
-	if (files.length === 0) {
-		errors.denunciaArchivos = 'Adjuntá la denuncia policial.';
-	} else if (files.length > MAX_FILES) {
-		errors.denunciaArchivos = 'Podés adjuntar hasta 5 archivos.';
-	} else {
-		const invalidFile = files.find((file) => !isAllowedFile(file));
-		const oversizedFile = files.find((file) => file.size > MAX_FILE_SIZE);
-
-		if (invalidFile) errors.denunciaArchivos = 'Solo se aceptan archivos PDF o imágenes.';
-		if (oversizedFile) errors.denunciaArchivos = 'Cada archivo debe pesar 10 MB o menos.';
-	}
+	const filesError = getFilesError(files);
+	if (filesError) errors.denunciaArchivos = filesError;
 
 	return errors;
 }
@@ -278,14 +305,14 @@ if (form) {
 
 	fileInput?.addEventListener('change', () => {
 		const files = getFiles();
-		const fileErrors = validate(payloadFromForm(), files).denunciaArchivos;
+		const fileErrors = getFilesError(files);
 
 		if (fileErrors) {
 			setError('denunciaArchivos', fileErrors);
 			showMessageModal({
 				title: 'Revisá el archivo',
 				message: fileErrors,
-				detail: 'Podés adjuntar PDF o imágenes. Hasta 5 archivos de 10 MB cada uno.',
+				detail: `Formatos permitidos: PDF o imágenes. Máximo ${MAX_FILES} archivos, ${formatBytes(MAX_FILE_SIZE)} por archivo.`,
 			});
 			return;
 		}
@@ -307,6 +334,13 @@ if (form) {
 			showErrors(errors);
 			statusMessage.textContent = 'Revisá los campos marcados.';
 			statusMessage.classList.add('is-error');
+			if (errors.denunciaArchivos) {
+				showMessageModal({
+					title: 'Revisá el archivo',
+					message: errors.denunciaArchivos,
+					detail: `Formatos permitidos: PDF o imágenes. Máximo ${MAX_FILES} archivos, ${formatBytes(MAX_FILE_SIZE)} por archivo.`,
+				});
+			}
 			return;
 		}
 

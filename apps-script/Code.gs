@@ -6,6 +6,9 @@ const CALENDAR_ID = 'sistemasssato@gmail.com';
 const SUPPORT_EMAIL = 'sistemasssato@gmail.com';
 const LINKTREE_URL = 'https://linktr.ee/sistemasssato';
 const EVENT_DURATION_MINUTES = 30;
+const MAX_DENUNCIA_FILES = 5;
+const MAX_DENUNCIA_FILE_SIZE = 10 * 1024 * 1024;
+const MAX_DENUNCIA_TOTAL_FILE_SIZE = 25 * 1024 * 1024;
 const AVAILABLE_TIMES = [
   '09:30',
   '10:00',
@@ -227,13 +230,22 @@ function validateDenunciaPayload(payload) {
     throw new Error('Indicá la marca del celular.');
   }
 
-  if (data.archivos.length === 0 || data.archivos.length > 5) {
-    throw new Error('Adjuntá entre 1 y 5 archivos.');
+  if (data.archivos.length === 0 || data.archivos.length > MAX_DENUNCIA_FILES) {
+    throw new Error(`Adjuntá entre 1 y ${MAX_DENUNCIA_FILES} archivos.`);
   }
+
+  let totalFileSize = 0;
 
   data.archivos.forEach((file) => {
     if (!file.name || !file.data) {
       throw new Error('Uno de los archivos adjuntos no es válido.');
+    }
+
+    const fileSize = Number(file.size || 0);
+    totalFileSize += fileSize;
+
+    if (fileSize > MAX_DENUNCIA_FILE_SIZE) {
+      throw new Error(`El archivo "${file.name}" supera los 10 MB permitidos.`);
     }
 
     if (!isAllowedDenunciaFile(file)) {
@@ -242,6 +254,10 @@ function validateDenunciaPayload(payload) {
 
     file.mimeType = getDenunciaMimeType(file);
   });
+
+  if (totalFileSize > MAX_DENUNCIA_TOTAL_FILE_SIZE) {
+    throw new Error('Los archivos adjuntos superan el peso total permitido. Subí archivos más livianos.');
+  }
 
   return data;
 }
