@@ -1,0 +1,433 @@
+---
+import Layout from '../layouts/Layout.astro';
+import '../styles/global.css';
+
+const linktreeUrl = 'https://linktr.ee/sistemasssato';
+const turnosUrl = 'https://mda-sistemas-ssato.vercel.app/turnos';
+const qrBase = 'https://api.qrserver.com/v1/create-qr-code/?size=220x220&margin=12&data=';
+---
+
+<Layout>
+	<main class="flyer-page">
+		<div class="print-actions" aria-hidden="true">
+			<button type="button" onclick="window.print()">Imprimir folleto</button>
+		</div>
+
+		<section class="flyer-sheet" aria-label="Folleto Mesa de Ayuda SSATO">
+			<header class="flyer-header">
+				<img src="/compu-ssato.png" alt="" width="72" height="72" />
+				<div>
+					<p>Area de Sistemas SSATO</p>
+					<h1>Mesa de Ayuda y Portal de Recursos</h1>
+					<span>Subsecretaria de Abordaje Territorial y Obras</span>
+				</div>
+			</header>
+
+			<section class="flyer-hero">
+				<div>
+					<p class="flyer-kicker">Importante</p>
+					<h2>Todos los pedidos de asistencia requieren turno previo.</h2>
+					<p>
+						Para soporte informatico, equipos, accesos, software, impresoras o conectividad,
+						ingresa al portal y solicita tu turno desde la Mesa de Ayuda SSATO.
+					</p>
+				</div>
+				<div class="flyer-contact-box">
+					<strong>Atencion</strong>
+					<span>Lunes a viernes</span>
+					<b>9:30 a 16:30 h</b>
+					<small>Turnos cada media hora, con pausa al mediodia.</small>
+				</div>
+			</section>
+
+			<section class="flyer-grid">
+				<article class="flyer-card">
+					<div>
+						<p class="flyer-kicker">Portal</p>
+						<h3>Linktree Sistemas SSATO</h3>
+						<p>
+							Desde el Linktree accedes a los recursos principales del area: turnos,
+							consultas, enlaces utiles y canales oficiales.
+						</p>
+					</div>
+					<img
+						class="flyer-qr"
+						src={`${qrBase}${encodeURIComponent(linktreeUrl)}`}
+						alt="QR del Linktree de Sistemas SSATO"
+						width="136"
+						height="136"
+					/>
+					<a href={linktreeUrl}>{linktreeUrl}</a>
+				</article>
+
+				<article class="flyer-card">
+					<div>
+						<p class="flyer-kicker">Turnos</p>
+						<h3>Mesa de Ayuda SSATO</h3>
+						<p>
+							Completa tus datos, elegi fecha y horario disponible. Al confirmar, recibiras
+							el numero de ticket por correo.
+						</p>
+					</div>
+					<img
+						class="flyer-qr"
+						src={`${qrBase}${encodeURIComponent(turnosUrl)}`}
+						alt="QR para solicitar turno en Mesa de Ayuda SSATO"
+						width="136"
+						height="136"
+					/>
+					<a href={turnosUrl}>{turnosUrl}</a>
+				</article>
+			</section>
+
+			<section class="flyer-steps">
+				<h2>Como usarlo</h2>
+				<ol>
+					<li>
+						<strong>Escanea el QR o entra al Linktree.</strong>
+						<span>Desde ahi vas a encontrar los accesos oficiales de Sistemas SSATO.</span>
+					</li>
+					<li>
+						<strong>Selecciona Mesa de Ayuda.</strong>
+						<span>Todos los pedidos presenciales o de gestion deben iniciarse con turno.</span>
+					</li>
+					<li>
+						<strong>Completa el formulario.</strong>
+						<span>Indica nombre, correo, CUIL/CUIT, reparticion, equipo y motivo.</span>
+					</li>
+					<li>
+						<strong>Revisa tu correo.</strong>
+						<span>Recibiras la confirmacion con el ticket del turno registrado.</span>
+					</li>
+				</ol>
+			</section>
+
+			<footer class="flyer-footer">
+				<div>
+					<strong>sistemasssato@gmail.com</strong>
+					<span>WhatsApp: +54 11 4147 8977</span>
+				</div>
+				<p>Sistemas SSATO - Soporte Tecnico</p>
+			</footer>
+		</section>
+	</main>
+</Layout>
+
+<style>
+	:global(body:has(.flyer-page)) {
+		background: #f3f3f3;
+		color: #111111;
+	}
+
+	.flyer-page {
+		display: grid;
+		place-items: start center;
+		min-height: 100vh;
+		padding: 24px;
+		color: #111111;
+		font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+	}
+
+	.print-actions {
+		width: min(210mm, 100%);
+		margin-bottom: 12px;
+		text-align: right;
+	}
+
+	.print-actions button {
+		width: auto;
+		min-height: 40px;
+		border: 1px solid #222222;
+		background: #ffffff;
+		color: #111111;
+		box-shadow: none;
+	}
+
+	.flyer-sheet {
+		width: 210mm;
+		min-height: 297mm;
+		display: flex;
+		flex-direction: column;
+		gap: 16px;
+		background: #ffffff;
+		padding: 16mm;
+		box-shadow: 0 18px 46px rgba(0, 0, 0, 0.16);
+	}
+
+	.flyer-header {
+		display: grid;
+		grid-template-columns: 72px 1fr;
+		gap: 14px;
+		align-items: center;
+		border-bottom: 2px solid #111111;
+		padding-bottom: 12px;
+	}
+
+	.flyer-header img {
+		width: 72px;
+		height: 72px;
+		object-fit: contain;
+		filter: grayscale(1) contrast(1.1);
+	}
+
+	.flyer-header p,
+	.flyer-kicker {
+		margin: 0 0 3px;
+		font-size: 0.78rem;
+		font-weight: 950;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+	}
+
+	.flyer-header h1 {
+		margin: 0;
+		color: #111111;
+		font-size: 2.1rem;
+		line-height: 1.05;
+	}
+
+	.flyer-header span {
+		display: block;
+		margin-top: 4px;
+		color: #444444;
+		font-weight: 750;
+	}
+
+	.flyer-hero {
+		display: grid;
+		grid-template-columns: 1fr 210px;
+		gap: 16px;
+		align-items: stretch;
+		border: 1.5px solid #222222;
+		background: #f7f7f7;
+		padding: 16px;
+	}
+
+	.flyer-hero h2,
+	.flyer-steps h2 {
+		margin: 0;
+		color: #111111;
+		font-size: 1.55rem;
+		line-height: 1.12;
+	}
+
+	.flyer-hero p:not(.flyer-kicker),
+	.flyer-card p,
+	.flyer-steps span {
+		margin: 8px 0 0;
+		color: #222222;
+		font-size: 1rem;
+		font-weight: 650;
+		line-height: 1.42;
+	}
+
+	.flyer-contact-box {
+		display: grid;
+		align-content: center;
+		border: 1.5px solid #222222;
+		background: #ffffff;
+		padding: 12px;
+		text-align: center;
+	}
+
+	.flyer-contact-box strong,
+	.flyer-contact-box b {
+		font-size: 1.25rem;
+		line-height: 1.1;
+	}
+
+	.flyer-contact-box span,
+	.flyer-contact-box small {
+		margin-top: 5px;
+		color: #333333;
+		font-weight: 750;
+	}
+
+	.flyer-grid {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 14px;
+	}
+
+	.flyer-card {
+		display: grid;
+		grid-template-columns: 1fr 136px;
+		gap: 12px;
+		align-items: center;
+		border: 1.5px solid #222222;
+		padding: 14px;
+	}
+
+	.flyer-card h3 {
+		margin: 0;
+		color: #111111;
+		font-size: 1.35rem;
+		line-height: 1.1;
+	}
+
+	.flyer-card a {
+		grid-column: 1 / -1;
+		overflow-wrap: anywhere;
+		border-top: 1px solid #d5d5d5;
+		padding-top: 9px;
+		color: #111111;
+		font-size: 0.88rem;
+		font-weight: 900;
+		text-decoration: none;
+	}
+
+	.flyer-qr {
+		width: 136px;
+		height: 136px;
+		border: 1px solid #222222;
+		background: #ffffff;
+		padding: 5px;
+	}
+
+	.flyer-steps {
+		border: 1.5px solid #222222;
+		padding: 14px 16px;
+	}
+
+	.flyer-steps ol {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 12px 16px;
+		margin: 12px 0 0;
+		padding: 0;
+		list-style: none;
+		counter-reset: steps;
+	}
+
+	.flyer-steps li {
+		position: relative;
+		min-height: 82px;
+		border-left: 5px solid #111111;
+		background: #f7f7f7;
+		padding: 10px 10px 10px 48px;
+		counter-increment: steps;
+	}
+
+	.flyer-steps li::before {
+		position: absolute;
+		top: 10px;
+		left: 10px;
+		display: grid;
+		place-items: center;
+		width: 28px;
+		height: 28px;
+		border: 1.5px solid #111111;
+		border-radius: 999px;
+		background: #ffffff;
+		content: counter(steps);
+		font-weight: 950;
+	}
+
+	.flyer-steps strong,
+	.flyer-steps span {
+		display: block;
+	}
+
+	.flyer-steps strong {
+		color: #111111;
+		font-size: 0.95rem;
+	}
+
+	.flyer-steps span {
+		margin-top: 4px;
+		font-size: 0.86rem;
+	}
+
+	.flyer-footer {
+		margin-top: auto;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 12px;
+		border-top: 2px solid #111111;
+		padding-top: 12px;
+		color: #111111;
+		font-size: 0.9rem;
+		font-weight: 850;
+	}
+
+	.flyer-footer strong,
+	.flyer-footer span {
+		display: block;
+	}
+
+	.flyer-footer p {
+		margin: 0;
+		text-align: right;
+	}
+
+	@media (max-width: 820px) {
+		.flyer-page {
+			padding: 12px;
+		}
+
+		.flyer-sheet {
+			width: 100%;
+			min-height: auto;
+			padding: 18px;
+		}
+
+		.flyer-hero,
+		.flyer-grid,
+		.flyer-card,
+		.flyer-steps ol {
+			grid-template-columns: 1fr;
+		}
+
+		.flyer-card {
+			justify-items: start;
+		}
+
+		.flyer-footer {
+			display: grid;
+			align-items: start;
+		}
+
+		.flyer-footer p {
+			text-align: left;
+		}
+	}
+
+	@page {
+		size: A4;
+		margin: 0;
+	}
+
+	@media print {
+		:global(html),
+		:global(body:has(.flyer-page)) {
+			width: 210mm;
+			min-height: 297mm;
+			background: #ffffff;
+		}
+
+		.print-actions {
+			display: none;
+		}
+
+		.flyer-page {
+			display: block;
+			min-height: auto;
+			padding: 0;
+		}
+
+		.flyer-sheet {
+			width: 210mm;
+			min-height: 297mm;
+			box-shadow: none;
+			page-break-after: avoid;
+		}
+
+		.flyer-card,
+		.flyer-hero,
+		.flyer-steps,
+		.flyer-steps li {
+			break-inside: avoid;
+		}
+	}
+</style>
