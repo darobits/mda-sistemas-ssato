@@ -166,13 +166,50 @@ function showSuccessModal({ title, message, detail }) {
 			<h2 id="success-title">${title}</h2>
 			<p>${message}</p>
 			<strong>${detail}</strong>
-			<small>Te redirigimos al inicio en unos segundos.</small>
+			<button class="modal-action-button" type="button">Listo</button>
 		</div>
 	`;
 	document.body.appendChild(modal);
-	setTimeout(() => {
+	modal.querySelector('button')?.addEventListener('click', () => {
 		window.location.href = '/';
-	}, 3200);
+	});
+}
+
+function showMessageModal({ title, message, detail }) {
+	const modal = document.createElement('div');
+	modal.className = 'success-modal';
+	modal.innerHTML = `
+		<div class="success-modal-card" role="dialog" aria-modal="true" aria-labelledby="message-title">
+			<div class="success-modal-icon is-warning" aria-hidden="true">!</div>
+			<h2 id="message-title">${title}</h2>
+			<p>${message}</p>
+			${detail ? `<small>${detail}</small>` : ''}
+			<button class="modal-action-button" type="button">Aceptar</button>
+		</div>
+	`;
+	document.body.appendChild(modal);
+	modal.querySelector('button')?.addEventListener('click', () => modal.remove());
+}
+
+function showLoadingModal(message) {
+	const modal = document.createElement('div');
+	modal.className = 'success-modal loading-modal';
+	modal.innerHTML = `
+		<div class="success-modal-card" role="status" aria-live="polite">
+			<div class="loading-spinner" aria-hidden="true"></div>
+			<h2>Enviando denuncia</h2>
+			<p>${message}</p>
+			<small>No cierres ni actualices la página.</small>
+		</div>
+	`;
+	document.body.classList.add('is-submitting');
+	document.body.appendChild(modal);
+	return modal;
+}
+
+function closeLoadingModal(modal) {
+	modal?.remove();
+	document.body.classList.remove('is-submitting');
 }
 
 function fileToPayload(file) {
@@ -213,6 +250,25 @@ async function submitDenuncia(payload) {
 }
 
 if (form) {
+	const fileInput = form.elements.denunciaArchivos;
+
+	fileInput?.addEventListener('change', () => {
+		const files = getFiles();
+		const fileErrors = validate(payloadFromForm(), files).denunciaArchivos;
+
+		if (fileErrors) {
+			setError('denunciaArchivos', fileErrors);
+			showMessageModal({
+				title: 'Revisá el archivo',
+				message: fileErrors,
+				detail: 'Podés adjuntar PDF o imágenes. Hasta 5 archivos de 10 MB cada uno.',
+			});
+			return;
+		}
+
+		setError('denunciaArchivos', '');
+	});
+
 	form.addEventListener('submit', async (event) => {
 		event.preventDefault();
 		clearErrors();
@@ -238,19 +294,28 @@ if (form) {
 
 		submitButton.disabled = true;
 		submitButton.textContent = 'Enviando...';
+		const loadingModal = showLoadingModal('Estamos cargando los archivos y registrando la denuncia.');
 
 		try {
 			const archivos = await Promise.all(files.map(fileToPayload));
 			const result = await submitDenuncia({ ...payload, archivos });
 			form.reset();
+			closeLoadingModal(loadingModal);
 			showSuccessModal({
 				title: 'Denuncia enviada',
 				message: 'Recibimos la documentación correctamente.',
 				detail: `ID: ${result.idDenuncia}`,
 			});
 		} catch (error) {
-			statusMessage.textContent = error.message || 'Ocurrió un error al enviar la denuncia.';
+			closeLoadingModal(loadingModal);
+			const message = error.message || 'Ocurrió un error al enviar la denuncia.';
+			statusMessage.textContent = message;
 			statusMessage.classList.add('is-error');
+			showMessageModal({
+				title: 'No se pudo enviar',
+				message,
+				detail: 'Revisá los archivos, tu conexión e intentá nuevamente.',
+			});
 		} finally {
 			submitButton.disabled = false;
 			submitButton.textContent = 'Enviar denuncia';

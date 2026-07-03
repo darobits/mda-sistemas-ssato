@@ -283,8 +283,8 @@ function enhanceFileInput(input) {
 		dropzone?.classList.add('has-files');
 	}
 
-	dropzone?.addEventListener('click', () => input.click());
 	input.addEventListener('change', updateSummary);
+	input.addEventListener('input', updateSummary);
 	updateSummary();
 }
 

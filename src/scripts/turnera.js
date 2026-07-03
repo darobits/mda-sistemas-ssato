@@ -137,13 +137,50 @@ function showSuccessModal({ title, message, detail }) {
 			<h2 id="success-title">${title}</h2>
 			<p>${message}</p>
 			<strong>${detail}</strong>
-			<small>Te redirigimos al inicio en unos segundos.</small>
+			<button class="modal-action-button" type="button">Listo</button>
 		</div>
 	`;
 	document.body.appendChild(modal);
-	setTimeout(() => {
+	modal.querySelector('button')?.addEventListener('click', () => {
 		window.location.href = '/';
-	}, 3200);
+	});
+}
+
+function showMessageModal({ title, message, detail }) {
+	const modal = document.createElement('div');
+	modal.className = 'success-modal';
+	modal.innerHTML = `
+		<div class="success-modal-card" role="dialog" aria-modal="true" aria-labelledby="message-title">
+			<div class="success-modal-icon is-warning" aria-hidden="true">!</div>
+			<h2 id="message-title">${title}</h2>
+			<p>${message}</p>
+			${detail ? `<small>${detail}</small>` : ''}
+			<button class="modal-action-button" type="button">Aceptar</button>
+		</div>
+	`;
+	document.body.appendChild(modal);
+	modal.querySelector('button')?.addEventListener('click', () => modal.remove());
+}
+
+function showLoadingModal(message) {
+	const modal = document.createElement('div');
+	modal.className = 'success-modal loading-modal';
+	modal.innerHTML = `
+		<div class="success-modal-card" role="status" aria-live="polite">
+			<div class="loading-spinner" aria-hidden="true"></div>
+			<h2>Enviando solicitud</h2>
+			<p>${message}</p>
+			<small>No cierres ni actualices la página.</small>
+		</div>
+	`;
+	document.body.classList.add('is-submitting');
+	document.body.appendChild(modal);
+	return modal;
+}
+
+function closeLoadingModal(modal) {
+	modal?.remove();
+	document.body.classList.remove('is-submitting');
 }
 
 async function submitTurno(payload) {
@@ -191,18 +228,27 @@ if (form) {
 
 		submitButton.disabled = true;
 		submitButton.textContent = 'Enviando...';
+		const loadingModal = showLoadingModal('Estamos registrando el turno, creando el evento y enviando la confirmación.');
 
 		try {
 			const result = await submitTurno(payload);
 			form.reset();
+			closeLoadingModal(loadingModal);
 			showSuccessModal({
 				title: 'Turno confirmado',
 				message: 'Tu solicitud fue registrada correctamente.',
-				detail: `ID: ${result.idTurno}`,
+				detail: `Ticket: ${result.idTurno}`,
 			});
 		} catch (error) {
-			statusMessage.textContent = error.message || 'Ocurrió un error al enviar la solicitud.';
+			closeLoadingModal(loadingModal);
+			const message = error.message || 'Ocurrió un error al enviar la solicitud.';
+			statusMessage.textContent = message;
 			statusMessage.classList.add('is-error');
+			showMessageModal({
+				title: 'No se pudo enviar',
+				message,
+				detail: 'Revisá tu conexión e intentá nuevamente.',
+			});
 		} finally {
 			submitButton.disabled = false;
 			submitButton.textContent = 'Confirmar turno';
