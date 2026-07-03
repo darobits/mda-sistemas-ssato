@@ -2,7 +2,8 @@ import { APPS_SCRIPT_URL } from './config.js';
 
 const MAX_FILES = 5;
 const MAX_FILE_SIZE = 10 * 1024 * 1024;
-const ALLOWED_FILE_TYPES = ['application/pdf', 'image/jpeg', 'image/png', 'image/webp', 'image/gif'];
+const PDF_EXTENSIONS = ['pdf'];
+const IMAGE_EXTENSIONS = ['jpg', 'jpeg', 'png', 'webp', 'gif', 'bmp', 'tif', 'tiff', 'heic', 'heif', 'avif'];
 
 const form = document.querySelector('#denuncia-form');
 const submitButton = document.querySelector('#denuncia-submit');
@@ -58,6 +59,33 @@ function validatePhone(value) {
 	return value.replace(/\D/g, '').length >= 8;
 }
 
+function getFileExtension(fileName) {
+	return String(fileName || '').split('.').pop().toLowerCase();
+}
+
+function isAllowedFile(file) {
+	const mimeType = String(file.type || '').toLowerCase();
+	const extension = getFileExtension(file.name);
+
+	return (
+		mimeType === 'application/pdf' ||
+		mimeType.startsWith('image/') ||
+		PDF_EXTENSIONS.includes(extension) ||
+		IMAGE_EXTENSIONS.includes(extension)
+	);
+}
+
+function getMimeType(file) {
+	const mimeType = String(file.type || '').toLowerCase();
+	const extension = getFileExtension(file.name);
+
+	if (mimeType) return mimeType;
+	if (PDF_EXTENSIONS.includes(extension)) return 'application/pdf';
+	if (IMAGE_EXTENSIONS.includes(extension)) return `image/${extension === 'jpg' ? 'jpeg' : extension}`;
+
+	return 'application/octet-stream';
+}
+
 function validate(payload, files) {
 	const errors = {};
 	const cuilNumbers = payload.cuil.replace(/\D/g, '');
@@ -96,7 +124,7 @@ function validate(payload, files) {
 	} else if (files.length > MAX_FILES) {
 		errors.denunciaArchivos = 'Podés adjuntar hasta 5 archivos.';
 	} else {
-		const invalidFile = files.find((file) => !ALLOWED_FILE_TYPES.includes(file.type));
+		const invalidFile = files.find((file) => !isAllowedFile(file));
 		const oversizedFile = files.find((file) => file.size > MAX_FILE_SIZE);
 
 		if (invalidFile) errors.denunciaArchivos = 'Solo se aceptan archivos PDF o imágenes.';
@@ -155,7 +183,7 @@ function fileToPayload(file) {
 			const result = String(reader.result || '');
 			resolve({
 				name: file.name,
-				mimeType: file.type,
+				mimeType: getMimeType(file),
 				size: file.size,
 				data: result.split(',')[1],
 			});

@@ -211,13 +211,15 @@ function validateDenunciaPayload(payload) {
   }
 
   data.archivos.forEach((file) => {
-    if (!file.name || !file.mimeType || !file.data) {
+    if (!file.name || !file.data) {
       throw new Error('Uno de los archivos adjuntos no es válido.');
     }
 
-    if (!/^image\//.test(file.mimeType) && file.mimeType !== 'application/pdf') {
+    if (!isAllowedDenunciaFile(file)) {
       throw new Error('Solo se aceptan archivos PDF o imágenes.');
     }
+
+    file.mimeType = getDenunciaMimeType(file);
   });
 
   return data;
@@ -241,6 +243,39 @@ function validateCuil(cuil) {
   if (cuil.replace(/\D/g, '').length !== 11) {
     throw new Error('El CUIL/CUIT debe tener 11 números.');
   }
+}
+
+function getFileExtension(fileName) {
+  const parts = String(fileName || '').split('.');
+  return parts.length > 1 ? parts.pop().toLowerCase() : '';
+}
+
+function isAllowedDenunciaFile(file) {
+  const mimeType = String(file.mimeType || '').toLowerCase();
+  const extension = getFileExtension(file.name);
+  const imageExtensions = ['jpg', 'jpeg', 'png', 'webp', 'gif', 'bmp', 'tif', 'tiff', 'heic', 'heif', 'avif'];
+
+  return (
+    mimeType === 'application/pdf' ||
+    mimeType.indexOf('image/') === 0 ||
+    extension === 'pdf' ||
+    imageExtensions.indexOf(extension) !== -1
+  );
+}
+
+function getDenunciaMimeType(file) {
+  const mimeType = String(file.mimeType || '').toLowerCase();
+  const extension = getFileExtension(file.name);
+
+  if (mimeType && mimeType !== 'application/octet-stream') {
+    return mimeType;
+  }
+
+  if (extension === 'pdf') return 'application/pdf';
+  if (extension === 'jpg') return 'image/jpeg';
+  if (extension) return `image/${extension}`;
+
+  return 'application/octet-stream';
 }
 
 function isBusinessDay(date) {
