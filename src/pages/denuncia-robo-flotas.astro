@@ -1,0 +1,29 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.astro';
+import DenunciaForm from '../components/DenunciaForm.astro';
+import Footer from '../components/Footer.astro';
+import FloatingWhatsApp from '../components/FloatingWhatsApp.astro';
+import '../styles/global.css';
+---
+
+<Layout>
+	<Navbar />
+	<main class="site-shell denuncia-shell">
+		<section class="denuncia-intro" aria-labelledby="denuncia-title">
+			<p class="eyebrow">Sistemas SSATO</p>
+			<h1 id="denuncia-title">Denuncia de robo – Flotas</h1>
+			<p>
+				Completá el formulario para informar el robo de un celular institucional. Adjuntá la
+				denuncia policial para que el Área de Sistemas SSATO pueda gestionar la reposición,
+				según corresponda.
+			</p>
+			<strong>Importante: el procedimiento puede variar según se trate de una línea de Gobierno o de Empresa.</strong>
+		</section>
+		<DenunciaForm />
+	</main>
+	<Footer />
+	<FloatingWhatsApp />
+	<script type="module" src="/src/scripts/denuncia.js"></script>
+	<script type="module" src="/src/scripts/ui-controls.js"></script>
+</Layout>

@@ -1,0 +1,116 @@
+---
+const marcas = ['Samsung', 'Motorola', 'Otro'];
+const tiposLinea = ['Línea de Gobierno', 'Línea de Empresa', 'No lo sé'];
+---
+
+<section class="form-section" aria-labelledby="denuncia-form-title">
+	<div class="form-card">
+		<div class="form-heading">
+			<p class="eyebrow">Denuncia de robo</p>
+			<h2 id="denuncia-form-title">Datos de la línea y equipo</h2>
+		</div>
+
+		<form id="denuncia-form" novalidate>
+			<div class="form-grid">
+				<label class="field">
+					<span>Nombre y apellido *</span>
+					<input type="text" name="nombre" autocomplete="name" minlength="3" maxlength="80" required />
+					<small data-error-for="nombre"></small>
+				</label>
+
+				<label class="field">
+					<span>Correo *</span>
+					<input type="email" name="correo" autocomplete="email" maxlength="120" required />
+					<small data-error-for="correo"></small>
+				</label>
+
+				<label class="field">
+					<span>CUIL/CUIT *</span>
+					<input
+						type="text"
+						name="cuil"
+						inputmode="numeric"
+						autocomplete="off"
+						pattern="[0-9]{11}"
+						maxlength="11"
+						required
+					/>
+					<small data-error-for="cuil"></small>
+				</label>
+
+				<label class="field">
+					<span>Teléfono de contacto *</span>
+					<input type="tel" name="telefonoContacto" autocomplete="tel" minlength="8" maxlength="20" required />
+					<small data-error-for="telefonoContacto"></small>
+				</label>
+
+				<label class="field">
+					<span>Tipo de línea *</span>
+					<select name="tipoLinea" required>
+						<option value="">Seleccionar</option>
+						{tiposLinea.map((tipo) => <option value={tipo}>{tipo}</option>)}
+					</select>
+					<small data-error-for="tipoLinea"></small>
+				</label>
+
+				<label class="field">
+					<span>Número de línea robada *</span>
+					<input type="tel" name="numeroLineaRobada" minlength="8" maxlength="20" required />
+					<small data-error-for="numeroLineaRobada"></small>
+				</label>
+
+				<label class="field">
+					<span>Marca del celular *</span>
+					<select name="marcaCelular" required>
+						<option value="">Seleccionar</option>
+						{marcas.map((marca) => <option value={marca}>{marca}</option>)}
+					</select>
+					<small data-error-for="marcaCelular"></small>
+				</label>
+
+				<label class="field">
+					<span>Otra marca</span>
+					<input type="text" name="otraMarca" maxlength="40" />
+					<small data-error-for="otraMarca"></small>
+				</label>
+
+				<label class="field">
+					<span>Modelo del celular</span>
+					<input type="text" name="modeloCelular" maxlength="80" />
+					<small data-error-for="modeloCelular"></small>
+				</label>
+
+				<label class="field field-full file-field">
+					<span>Adjuntá la denuncia policial *</span>
+					<input
+						id="denuncia-archivos"
+						type="file"
+						name="denunciaArchivos"
+						accept=".pdf,image/*"
+						multiple
+						required
+					/>
+					<span class="file-dropzone" aria-hidden="true">
+						<span class="file-dropzone-icon">
+							<svg viewBox="0 0 24 24" focusable="false">
+								<path d="M12 3.75a.75.75 0 0 1 .53.22l4 4a.75.75 0 0 1-1.06 1.06l-2.72-2.72v9.94a.75.75 0 0 1-1.5 0V6.31L8.53 9.03a.75.75 0 0 1-1.06-1.06l4-4a.75.75 0 0 1 .53-.22ZM5.75 16a.75.75 0 0 1 .75.75v1.5c0 .69.56 1.25 1.25 1.25h8.5c.69 0 1.25-.56 1.25-1.25v-1.5a.75.75 0 0 1 1.5 0v1.5A2.75 2.75 0 0 1 16.25 21h-8.5A2.75 2.75 0 0 1 5 18.25v-1.5a.75.75 0 0 1 .75-.75Z" />
+							</svg>
+						</span>
+						<span>
+							<strong>Subir denuncia policial</strong>
+							<em>PDF o imagen. Hasta 5 archivos de 10 MB.</em>
+						</span>
+					</span>
+					<small data-error-for="denunciaArchivos">
+						No hay archivos seleccionados.
+					</small>
+				</label>
+			</div>
+
+			<div class="form-actions">
+				<p id="denuncia-status" class="form-status" role="status" aria-live="polite"></p>
+				<button id="denuncia-submit" type="submit">Enviar denuncia</button>
+			</div>
+		</form>
+	</div>
+</section>
