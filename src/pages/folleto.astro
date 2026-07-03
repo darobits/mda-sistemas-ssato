@@ -15,10 +15,7 @@ const qrBase = 'https://api.qrserver.com/v1/create-qr-code/?size=220x220&margin=
 
 		<section class="flyer-sheet" aria-label="Folleto Mesa de Ayuda SSATO">
 			<header class="flyer-header">
-				<div class="flyer-logos" aria-hidden="true">
-					<img class="flyer-logo-computer" src="/compu-ssato.png" alt="" width="76" height="76" />
-					<img class="flyer-logo-ssato" src="/logo-ssato-transparente.png" alt="" width="170" height="70" />
-				</div>
+				<img class="flyer-logo-computer" src="/compu-ssato.png" alt="" width="96" height="96" />
 				<div>
 					<p>Area de Sistemas SSATO</p>
 					<h1>Mesa de Ayuda y Portal de Recursos</h1>
@@ -119,8 +116,11 @@ const qrBase = 'https://api.qrserver.com/v1/create-qr-code/?size=220x220&margin=
 
 <style>
 	:global(body:has(.flyer-page)) {
-		background: #f3f3f3;
-		color: #111111;
+		background:
+			radial-gradient(circle at 18% 12%, rgba(0, 185, 214, 0.18), transparent 28rem),
+			radial-gradient(circle at 82% 20%, rgba(34, 197, 148, 0.14), transparent 26rem),
+			linear-gradient(135deg, #071322 0%, #081522 48%, #061811 100%);
+		color: #eef6ff;
 	}
 
 	.flyer-page {
@@ -128,7 +128,7 @@ const qrBase = 'https://api.qrserver.com/v1/create-qr-code/?size=220x220&margin=
 		place-items: start center;
 		min-height: 100vh;
 		padding: 24px;
-		color: #111111;
+		color: #eef6ff;
 		font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 	}
 
@@ -141,10 +141,10 @@ const qrBase = 'https://api.qrserver.com/v1/create-qr-code/?size=220x220&margin=
 	.print-actions button {
 		width: auto;
 		min-height: 40px;
-		border: 1px solid #222222;
-		background: #ffffff;
-		color: #111111;
-		box-shadow: none;
+		border: 1px solid rgba(114, 227, 196, 0.34);
+		background: linear-gradient(135deg, #008cc9, #00a887);
+		color: #ffffff;
+		box-shadow: 0 14px 28px rgba(0, 127, 186, 0.26);
 	}
 
 	.flyer-sheet {
@@ -156,12 +156,12 @@ const qrBase = 'https://api.qrserver.com/v1/create-qr-code/?size=220x220&margin=
 		position: relative;
 		overflow: hidden;
 		background:
-			linear-gradient(90deg, rgba(0, 0, 0, 0.035) 1px, transparent 1px),
-			linear-gradient(180deg, rgba(0, 0, 0, 0.025) 1px, transparent 1px),
-			#ffffff;
-		background-size: 18px 18px;
+			linear-gradient(rgba(6, 19, 33, 0.82), rgba(6, 19, 33, 0.86)),
+			url('/exterior-ministerio.png') center center / cover no-repeat,
+			linear-gradient(135deg, #071322 0%, #081522 48%, #061811 100%);
 		padding: 16mm;
-		box-shadow: 0 18px 46px rgba(0, 0, 0, 0.16);
+		border: 1px solid rgba(114, 227, 196, 0.24);
+		box-shadow: 0 24px 60px rgba(0, 0, 0, 0.34);
 	}
 
 	.flyer-sheet::before {
@@ -170,55 +170,50 @@ const qrBase = 'https://api.qrserver.com/v1/create-qr-code/?size=220x220&margin=
 		right: 0;
 		left: 0;
 		height: 8mm;
-		background: repeating-linear-gradient(
-			90deg,
-			#111111 0 24mm,
-			#ffffff 24mm 28mm,
-			#d9d9d9 28mm 52mm,
-			#ffffff 52mm 56mm
-		);
+		background: linear-gradient(90deg, #008cc9, #00a887, #72e3c4);
 		content: '';
+	}
+
+	.flyer-sheet::after {
+		position: absolute;
+		right: -38mm;
+		bottom: -42mm;
+		width: 96mm;
+		height: 96mm;
+		border: 1px solid rgba(114, 227, 196, 0.2);
+		border-radius: 999px;
+		background: radial-gradient(circle, rgba(0, 168, 135, 0.16), transparent 66%);
+		content: '';
+		pointer-events: none;
 	}
 
 	.flyer-header {
 		display: grid;
-		grid-template-columns: 270px 1fr;
-		gap: 18px;
+		grid-template-columns: 104px 1fr;
+		gap: 20px;
 		align-items: center;
 		position: relative;
-		border: 2px solid #111111;
-		background: rgba(255, 255, 255, 0.94);
-		padding: 14px 16px;
+		z-index: 1;
+		border: 1px solid rgba(114, 227, 196, 0.28);
+		border-radius: 12px;
+		background: rgba(8, 21, 34, 0.78);
+		padding: 16px 18px;
 		margin-top: 4mm;
-	}
-
-	.flyer-logos {
-		display: grid;
-		grid-template-columns: 76px 1fr;
-		gap: 10px;
-		align-items: center;
-		border-right: 1.5px solid #222222;
-		padding-right: 16px;
-	}
-
-	.flyer-logos img {
-		object-fit: contain;
-		filter: grayscale(1) contrast(1.1);
+		backdrop-filter: blur(10px);
+		box-shadow: 0 18px 40px rgba(0, 0, 0, 0.2);
 	}
 
 	.flyer-logo-computer {
-		width: 76px;
-		height: 76px;
-	}
-
-	.flyer-logo-ssato {
-		width: 170px;
-		max-height: 70px;
+		width: 96px;
+		height: 96px;
+		object-fit: contain;
+		filter: drop-shadow(0 12px 24px rgba(0, 185, 214, 0.24));
 	}
 
 	.flyer-header p,
 	.flyer-kicker {
 		margin: 0 0 3px;
+		color: #72e3c4;
 		font-size: 0.78rem;
 		font-weight: 950;
 		letter-spacing: 0.08em;
@@ -227,7 +222,7 @@ const qrBase = 'https://api.qrserver.com/v1/create-qr-code/?size=220x220&margin=
 
 	.flyer-header h1 {
 		margin: 0;
-		color: #111111;
+		color: #eef6ff;
 		font-size: 2.25rem;
 		line-height: 1.05;
 	}
@@ -235,7 +230,7 @@ const qrBase = 'https://api.qrserver.com/v1/create-qr-code/?size=220x220&margin=
 	.flyer-header span {
 		display: block;
 		margin-top: 4px;
-		color: #444444;
+		color: #b8c8d8;
 		font-weight: 750;
 	}
 
@@ -244,18 +239,21 @@ const qrBase = 'https://api.qrserver.com/v1/create-qr-code/?size=220x220&margin=
 		grid-template-columns: 1fr 210px;
 		gap: 16px;
 		align-items: stretch;
-		border: 2px solid #111111;
+		position: relative;
+		z-index: 1;
+		border: 1px solid rgba(114, 227, 196, 0.28);
+		border-radius: 12px;
 		background:
-			linear-gradient(135deg, #ffffff 0 62%, #ededed 62% 100%),
-			#f7f7f7;
+			linear-gradient(135deg, rgba(0, 140, 201, 0.22), rgba(0, 168, 135, 0.18)),
+			rgba(238, 246, 255, 0.94);
 		padding: 18px;
-		box-shadow: inset 0 0 0 5px #ffffff;
+		box-shadow: 0 18px 42px rgba(0, 0, 0, 0.2);
 	}
 
 	.flyer-hero h2,
 	.flyer-steps h2 {
 		margin: 0;
-		color: #111111;
+		color: #071322;
 		font-size: 1.55rem;
 		line-height: 1.12;
 	}
@@ -264,7 +262,7 @@ const qrBase = 'https://api.qrserver.com/v1/create-qr-code/?size=220x220&margin=
 	.flyer-card p,
 	.flyer-steps span {
 		margin: 8px 0 0;
-		color: #222222;
+		color: #284057;
 		font-size: 1rem;
 		font-weight: 650;
 		line-height: 1.42;
@@ -273,17 +271,21 @@ const qrBase = 'https://api.qrserver.com/v1/create-qr-code/?size=220x220&margin=
 	.flyer-contact-box {
 		display: grid;
 		align-content: center;
-		border: 2px solid #222222;
+		border: 1px solid rgba(0, 168, 135, 0.28);
+		border-radius: 10px;
 		background: #ffffff;
 		padding: 12px;
 		text-align: center;
+		box-shadow: inset 0 0 0 4px rgba(0, 168, 135, 0.06);
 	}
 
 	.flyer-contact-label {
 		justify-self: center;
 		width: fit-content;
-		border: 1px solid #222222;
-		background: #f1f1f1;
+		border: 1px solid rgba(0, 168, 135, 0.28);
+		border-radius: 999px;
+		background: rgba(0, 168, 135, 0.12);
+		color: #00705d;
 		padding: 3px 8px;
 		font-size: 0.72rem;
 		font-weight: 950;
@@ -300,7 +302,7 @@ const qrBase = 'https://api.qrserver.com/v1/create-qr-code/?size=220x220&margin=
 	.flyer-contact-box span,
 	.flyer-contact-box small {
 		margin-top: 5px;
-		color: #333333;
+		color: #40586e;
 		font-weight: 750;
 	}
 
@@ -316,25 +318,28 @@ const qrBase = 'https://api.qrserver.com/v1/create-qr-code/?size=220x220&margin=
 		gap: 12px;
 		align-items: center;
 		position: relative;
-		border: 2px solid #222222;
-		background: rgba(255, 255, 255, 0.96);
+		z-index: 1;
+		border: 1px solid rgba(114, 227, 196, 0.28);
+		border-radius: 12px;
+		background: rgba(238, 246, 255, 0.94);
 		padding: 16px;
-		box-shadow: 7px 7px 0 #e6e6e6;
+		box-shadow: 0 16px 34px rgba(0, 0, 0, 0.18);
 	}
 
 	.flyer-card::before {
 		position: absolute;
 		top: 0;
 		left: 0;
-		width: 8px;
+		width: 7px;
 		height: 100%;
-		background: repeating-linear-gradient(180deg, #111111 0 16px, #ffffff 16px 22px);
+		border-radius: 12px 0 0 12px;
+		background: linear-gradient(180deg, #008cc9, #00a887);
 		content: '';
 	}
 
 	.flyer-card h3 {
 		margin: 0;
-		color: #111111;
+		color: #071322;
 		font-size: 1.35rem;
 		line-height: 1.1;
 	}
@@ -342,9 +347,9 @@ const qrBase = 'https://api.qrserver.com/v1/create-qr-code/?size=220x220&margin=
 	.flyer-card a {
 		grid-column: 1 / -1;
 		overflow-wrap: anywhere;
-		border-top: 1px solid #d5d5d5;
+		border-top: 1px solid rgba(0, 127, 186, 0.18);
 		padding-top: 9px;
-		color: #111111;
+		color: #00705d;
 		font-size: 0.88rem;
 		font-weight: 900;
 		text-decoration: none;
@@ -353,15 +358,21 @@ const qrBase = 'https://api.qrserver.com/v1/create-qr-code/?size=220x220&margin=
 	.flyer-qr {
 		width: 136px;
 		height: 136px;
-		border: 1px solid #222222;
+		border: 1px solid rgba(0, 127, 186, 0.24);
+		border-radius: 10px;
 		background: #ffffff;
 		padding: 5px;
+		box-shadow: 0 12px 24px rgba(0, 127, 186, 0.14);
 	}
 
 	.flyer-steps {
-		border: 2px solid #222222;
-		background: rgba(255, 255, 255, 0.94);
+		position: relative;
+		z-index: 1;
+		border: 1px solid rgba(114, 227, 196, 0.28);
+		border-radius: 12px;
+		background: rgba(238, 246, 255, 0.94);
 		padding: 14px 16px;
+		box-shadow: 0 16px 34px rgba(0, 0, 0, 0.18);
 	}
 
 	.flyer-steps ol {
@@ -377,10 +388,11 @@ const qrBase = 'https://api.qrserver.com/v1/create-qr-code/?size=220x220&margin=
 	.flyer-steps li {
 		position: relative;
 		min-height: 82px;
-		border-left: 5px solid #111111;
+		border-left: 5px solid #00a887;
+		border-radius: 8px;
 		background:
-			linear-gradient(90deg, #f1f1f1, #ffffff),
-			#f7f7f7;
+			linear-gradient(90deg, rgba(0, 168, 135, 0.1), rgba(255, 255, 255, 0.92)),
+			#ffffff;
 		padding: 10px 10px 10px 48px;
 		counter-increment: steps;
 	}
@@ -393,9 +405,10 @@ const qrBase = 'https://api.qrserver.com/v1/create-qr-code/?size=220x220&margin=
 		place-items: center;
 		width: 28px;
 		height: 28px;
-		border: 1.5px solid #111111;
+		border: 1px solid rgba(0, 168, 135, 0.3);
 		border-radius: 999px;
-		background: #ffffff;
+		background: linear-gradient(135deg, #008cc9, #00a887);
+		color: #ffffff;
 		content: counter(steps);
 		font-weight: 950;
 	}
@@ -406,7 +419,7 @@ const qrBase = 'https://api.qrserver.com/v1/create-qr-code/?size=220x220&margin=
 	}
 
 	.flyer-steps strong {
-		color: #111111;
+		color: #071322;
 		font-size: 0.95rem;
 	}
 
@@ -421,12 +434,19 @@ const qrBase = 'https://api.qrserver.com/v1/create-qr-code/?size=220x220&margin=
 		align-items: center;
 		justify-content: space-between;
 		gap: 12px;
-		border: 2px solid #111111;
-		background: #ffffff;
+		position: relative;
+		z-index: 1;
+		border: 1px solid rgba(114, 227, 196, 0.28);
+		border-radius: 12px;
+		background: rgba(8, 21, 34, 0.82);
 		padding: 12px 14px;
-		color: #111111;
+		color: #eef6ff;
 		font-size: 0.9rem;
 		font-weight: 850;
+	}
+
+	.flyer-footer span {
+		color: #b8c8d8;
 	}
 
 	.flyer-footer strong,
@@ -455,21 +475,9 @@ const qrBase = 'https://api.qrserver.com/v1/create-qr-code/?size=220x220&margin=
 			gap: 12px;
 		}
 
-		.flyer-logos {
-			grid-template-columns: 64px 1fr;
-			border-right: 0;
-			border-bottom: 1.5px solid #222222;
-			padding-right: 0;
-			padding-bottom: 10px;
-		}
-
 		.flyer-logo-computer {
-			width: 64px;
-			height: 64px;
-		}
-
-		.flyer-logo-ssato {
-			width: min(170px, 100%);
+			width: 72px;
+			height: 72px;
 		}
 
 		.flyer-header h1 {
@@ -507,7 +515,7 @@ const qrBase = 'https://api.qrserver.com/v1/create-qr-code/?size=220x220&margin=
 		:global(body:has(.flyer-page)) {
 			width: 210mm;
 			min-height: 297mm;
-			background: #ffffff;
+			background: #071322;
 		}
 
 		.print-actions {
