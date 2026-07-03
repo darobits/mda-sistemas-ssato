@@ -1,8 +1,8 @@
 import { APPS_SCRIPT_URL } from './config.js';
 
 const MAX_FILES = 5;
-const MAX_FILE_SIZE = 10 * 1024 * 1024;
-const MAX_TOTAL_FILE_SIZE = 25 * 1024 * 1024;
+const MAX_FILE_SIZE = 20 * 1024 * 1024;
+const MAX_TOTAL_FILE_SIZE = 45 * 1024 * 1024;
 const PDF_EXTENSIONS = ['pdf'];
 const IMAGE_EXTENSIONS = ['jpg', 'jpeg', 'png', 'webp', 'gif', 'bmp', 'tif', 'tiff', 'heic', 'heif', 'avif'];
 

@@ -7,8 +7,8 @@ const SUPPORT_EMAIL = 'sistemasssato@gmail.com';
 const LINKTREE_URL = 'https://linktr.ee/sistemasssato';
 const EVENT_DURATION_MINUTES = 30;
 const MAX_DENUNCIA_FILES = 5;
-const MAX_DENUNCIA_FILE_SIZE = 10 * 1024 * 1024;
-const MAX_DENUNCIA_TOTAL_FILE_SIZE = 25 * 1024 * 1024;
+const MAX_DENUNCIA_FILE_SIZE = 20 * 1024 * 1024;
+const MAX_DENUNCIA_TOTAL_FILE_SIZE = 45 * 1024 * 1024;
 const AVAILABLE_TIMES = [
   '09:30',
   '10:00',
@@ -245,7 +245,7 @@ function validateDenunciaPayload(payload) {
     totalFileSize += fileSize;
 
     if (fileSize > MAX_DENUNCIA_FILE_SIZE) {
-      throw new Error(`El archivo "${file.name}" supera los 10 MB permitidos.`);
+      throw new Error(`El archivo "${file.name}" supera los ${formatBytes(MAX_DENUNCIA_FILE_SIZE)} permitidos.`);
     }
 
     if (!isAllowedDenunciaFile(file)) {
@@ -256,7 +256,7 @@ function validateDenunciaPayload(payload) {
   });
 
   if (totalFileSize > MAX_DENUNCIA_TOTAL_FILE_SIZE) {
-    throw new Error('Los archivos adjuntos superan el peso total permitido. Subí archivos más livianos.');
+    throw new Error(`Los archivos adjuntos superan el peso total permitido de ${formatBytes(MAX_DENUNCIA_TOTAL_FILE_SIZE)}. Subí archivos más livianos.`);
   }
 
   return data;
@@ -280,6 +280,10 @@ function validateCuil(cuil) {
   if (cuil.replace(/\D/g, '').length !== 11) {
     throw new Error('El CUIL/CUIT debe tener 11 números.');
   }
+}
+
+function formatBytes(bytes) {
+  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
 }
 
 function getFileExtension(fileName) {
