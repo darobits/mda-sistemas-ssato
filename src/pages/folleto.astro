@@ -15,7 +15,7 @@ const qrBase = 'https://api.qrserver.com/v1/create-qr-code/?size=220x220&margin=
 
 		<section class="flyer-sheet" aria-label="Folleto Mesa de Ayuda SSATO">
 			<header class="flyer-header">
-				<img class="flyer-logo-computer" src="/compu-ssato.png" alt="" width="96" height="96" />
+				<img class="flyer-logo-ssato" src="/logo-ssato-transparente.png" alt="Sistemas SSATO" width="310" height="126" />
 				<div>
 					<p>Area de Sistemas SSATO</p>
 					<h1>Mesa de Ayuda y Portal de Recursos</h1>
@@ -37,7 +37,6 @@ const qrBase = 'https://api.qrserver.com/v1/create-qr-code/?size=220x220&margin=
 					<strong>Atencion</strong>
 					<span>Lunes a viernes</span>
 					<b>9:30 a 16:30 h</b>
-					<small>Turnos cada media hora, con pausa al mediodia.</small>
 				</div>
 			</section>
 
@@ -108,7 +107,7 @@ const qrBase = 'https://api.qrserver.com/v1/create-qr-code/?size=220x220&margin=
 					<strong>sistemasssato@gmail.com</strong>
 					<span>WhatsApp: +54 11 4147 8977</span>
 				</div>
-				<p>Sistemas SSATO - Soporte Tecnico</p>
+				<p>Área de Sistemas SSATO - Mesa de Ayuda</p>
 			</footer>
 		</section>
 	</main>
@@ -118,8 +117,8 @@ const qrBase = 'https://api.qrserver.com/v1/create-qr-code/?size=220x220&margin=
 	:global(body:has(.flyer-page)) {
 		background:
 			radial-gradient(circle at 18% 12%, rgba(0, 185, 214, 0.18), transparent 28rem),
-			radial-gradient(circle at 82% 20%, rgba(34, 197, 148, 0.14), transparent 26rem),
-			linear-gradient(135deg, #071322 0%, #081522 48%, #061811 100%);
+			radial-gradient(circle at 82% 20%, rgba(0, 145, 214, 0.12), transparent 26rem),
+			linear-gradient(135deg, #edf9ff 0%, #dff7ff 48%, #eefcff 100%);
 		color: #eef6ff;
 	}
 
@@ -156,9 +155,9 @@ const qrBase = 'https://api.qrserver.com/v1/create-qr-code/?size=220x220&margin=
 		position: relative;
 		overflow: hidden;
 		background:
-			linear-gradient(rgba(6, 19, 33, 0.82), rgba(6, 19, 33, 0.86)),
+			linear-gradient(rgba(6, 19, 33, 0.7), rgba(6, 19, 33, 0.78)),
 			url('/exterior-ministerio.png') center center / cover no-repeat,
-			linear-gradient(135deg, #071322 0%, #081522 48%, #061811 100%);
+			linear-gradient(135deg, #07355a 0%, #072844 48%, #061f34 100%);
 		padding: 16mm;
 		border: 1px solid rgba(114, 227, 196, 0.24);
 		box-shadow: 0 24px 60px rgba(0, 0, 0, 0.34);
@@ -170,7 +169,7 @@ const qrBase = 'https://api.qrserver.com/v1/create-qr-code/?size=220x220&margin=
 		right: 0;
 		left: 0;
 		height: 8mm;
-		background: linear-gradient(90deg, #008cc9, #00a887, #72e3c4);
+		background: linear-gradient(90deg, #00d9ff, #008cc9, #00a6ff);
 		content: '';
 	}
 
@@ -194,26 +193,26 @@ const qrBase = 'https://api.qrserver.com/v1/create-qr-code/?size=220x220&margin=
 		align-items: center;
 		position: relative;
 		z-index: 1;
-		border: 1px solid rgba(114, 227, 196, 0.28);
+		border: 1px solid rgba(0, 217, 255, 0.28);
 		border-radius: 12px;
-		background: rgba(8, 21, 34, 0.78);
+		background: rgba(238, 250, 255, 0.92);
 		padding: 16px 18px;
 		margin-top: 4mm;
 		backdrop-filter: blur(10px);
 		box-shadow: 0 18px 40px rgba(0, 0, 0, 0.2);
 	}
 
-	.flyer-logo-computer {
-		width: 96px;
-		height: 96px;
+	.flyer-logo-ssato {
+		width: min(310px, 100%);
+		max-height: 126px;
 		object-fit: contain;
-		filter: drop-shadow(0 12px 24px rgba(0, 185, 214, 0.24));
+		filter: drop-shadow(0 14px 26px rgba(0, 140, 201, 0.16));
 	}
 
 	.flyer-header p,
 	.flyer-kicker {
 		margin: 0 0 3px;
-		color: #72e3c4;
+		color: #008cc9;
 		font-size: 0.78rem;
 		font-weight: 950;
 		letter-spacing: 0.08em;
@@ -222,7 +221,7 @@ const qrBase = 'https://api.qrserver.com/v1/create-qr-code/?size=220x220&margin=
 
 	.flyer-header h1 {
 		margin: 0;
-		color: #eef6ff;
+		color: #071322;
 		font-size: 2.25rem;
 		line-height: 1.05;
 	}
@@ -230,7 +229,7 @@ const qrBase = 'https://api.qrserver.com/v1/create-qr-code/?size=220x220&margin=
 	.flyer-header span {
 		display: block;
 		margin-top: 4px;
-		color: #b8c8d8;
+		color: #40586e;
 		font-weight: 750;
 	}
 
@@ -241,11 +240,11 @@ const qrBase = 'https://api.qrserver.com/v1/create-qr-code/?size=220x220&margin=
 		align-items: stretch;
 		position: relative;
 		z-index: 1;
-		border: 1px solid rgba(114, 227, 196, 0.28);
+		border: 1px solid rgba(0, 140, 201, 0.22);
 		border-radius: 12px;
 		background:
-			linear-gradient(135deg, rgba(0, 140, 201, 0.22), rgba(0, 168, 135, 0.18)),
-			rgba(238, 246, 255, 0.94);
+			linear-gradient(135deg, rgba(0, 217, 255, 0.18), rgba(0, 140, 201, 0.12)),
+			rgba(248, 253, 255, 0.96);
 		padding: 18px;
 		box-shadow: 0 18px 42px rgba(0, 0, 0, 0.2);
 	}
@@ -319,9 +318,9 @@ const qrBase = 'https://api.qrserver.com/v1/create-qr-code/?size=220x220&margin=
 		align-items: center;
 		position: relative;
 		z-index: 1;
-		border: 1px solid rgba(114, 227, 196, 0.28);
+		border: 1px solid rgba(0, 140, 201, 0.22);
 		border-radius: 12px;
-		background: rgba(238, 246, 255, 0.94);
+		background: rgba(248, 253, 255, 0.96);
 		padding: 16px;
 		box-shadow: 0 16px 34px rgba(0, 0, 0, 0.18);
 	}
@@ -333,7 +332,7 @@ const qrBase = 'https://api.qrserver.com/v1/create-qr-code/?size=220x220&margin=
 		width: 7px;
 		height: 100%;
 		border-radius: 12px 0 0 12px;
-		background: linear-gradient(180deg, #008cc9, #00a887);
+		background: linear-gradient(180deg, #00d9ff, #008cc9);
 		content: '';
 	}
 
@@ -349,7 +348,7 @@ const qrBase = 'https://api.qrserver.com/v1/create-qr-code/?size=220x220&margin=
 		overflow-wrap: anywhere;
 		border-top: 1px solid rgba(0, 127, 186, 0.18);
 		padding-top: 9px;
-		color: #00705d;
+		color: #008cc9;
 		font-size: 0.88rem;
 		font-weight: 900;
 		text-decoration: none;
@@ -368,9 +367,9 @@ const qrBase = 'https://api.qrserver.com/v1/create-qr-code/?size=220x220&margin=
 	.flyer-steps {
 		position: relative;
 		z-index: 1;
-		border: 1px solid rgba(114, 227, 196, 0.28);
+		border: 1px solid rgba(0, 140, 201, 0.22);
 		border-radius: 12px;
-		background: rgba(238, 246, 255, 0.94);
+		background: rgba(248, 253, 255, 0.96);
 		padding: 14px 16px;
 		box-shadow: 0 16px 34px rgba(0, 0, 0, 0.18);
 	}
@@ -388,10 +387,10 @@ const qrBase = 'https://api.qrserver.com/v1/create-qr-code/?size=220x220&margin=
 	.flyer-steps li {
 		position: relative;
 		min-height: 82px;
-		border-left: 5px solid #00a887;
+		border-left: 5px solid #008cc9;
 		border-radius: 8px;
 		background:
-			linear-gradient(90deg, rgba(0, 168, 135, 0.1), rgba(255, 255, 255, 0.92)),
+			linear-gradient(90deg, rgba(0, 217, 255, 0.12), rgba(255, 255, 255, 0.94)),
 			#ffffff;
 		padding: 10px 10px 10px 48px;
 		counter-increment: steps;
@@ -407,7 +406,7 @@ const qrBase = 'https://api.qrserver.com/v1/create-qr-code/?size=220x220&margin=
 		height: 28px;
 		border: 1px solid rgba(0, 168, 135, 0.3);
 		border-radius: 999px;
-		background: linear-gradient(135deg, #008cc9, #00a887);
+		background: linear-gradient(135deg, #00d9ff, #008cc9);
 		color: #ffffff;
 		content: counter(steps);
 		font-weight: 950;
@@ -436,9 +435,9 @@ const qrBase = 'https://api.qrserver.com/v1/create-qr-code/?size=220x220&margin=
 		gap: 12px;
 		position: relative;
 		z-index: 1;
-		border: 1px solid rgba(114, 227, 196, 0.28);
+		border: 1px solid rgba(0, 217, 255, 0.24);
 		border-radius: 12px;
-		background: rgba(8, 21, 34, 0.82);
+		background: rgba(7, 19, 34, 0.86);
 		padding: 12px 14px;
 		color: #eef6ff;
 		font-size: 0.9rem;
@@ -475,9 +474,8 @@ const qrBase = 'https://api.qrserver.com/v1/create-qr-code/?size=220x220&margin=
 			gap: 12px;
 		}
 
-		.flyer-logo-computer {
-			width: 72px;
-			height: 72px;
+		.flyer-logo-ssato {
+			width: min(270px, 100%);
 		}
 
 		.flyer-header h1 {
