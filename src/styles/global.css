@@ -694,6 +694,12 @@ textarea:focus {
 .date-picker-panel {
 	width: min(310px, 100vw - 32px);
 	padding: 12px;
+	background:
+		linear-gradient(180deg, rgba(233, 247, 255, 0.98), rgba(255, 255, 255, 0.98) 42%),
+		linear-gradient(135deg, rgba(0, 140, 201, 0.14), rgba(0, 168, 135, 0.12));
+	box-shadow:
+		0 24px 50px rgba(5, 21, 36, 0.2),
+		0 0 0 4px rgba(0, 168, 135, 0.08);
 }
 
 .date-picker-header {
@@ -702,25 +708,29 @@ textarea:focus {
 	justify-content: space-between;
 	gap: 10px;
 	margin-bottom: 10px;
+	border-radius: 8px;
+	background: linear-gradient(135deg, rgba(0, 140, 201, 0.12), rgba(0, 168, 135, 0.14));
+	padding: 8px;
 }
 
 .date-picker-header strong {
-	color: #102033;
+	color: #00705d;
 	font-size: 0.94rem;
+	font-weight: 950;
 	text-transform: capitalize;
 }
 
 .date-picker-header button {
 	width: 32px;
 	height: 32px;
-	border: 1px solid #d2e2ec;
+	border: 1px solid rgba(0, 168, 135, 0.22);
 	border-radius: 8px;
-	background: #f2f8fc;
-	color: #007fba;
+	background: #ffffff;
+	color: #008cc9;
 	padding: 0;
 	font-size: 1.35rem;
 	line-height: 1;
-	box-shadow: none;
+	box-shadow: 0 8px 18px rgba(0, 127, 186, 0.1);
 }
 
 .date-picker-week,
@@ -732,7 +742,7 @@ textarea:focus {
 
 .date-picker-week {
 	margin-bottom: 6px;
-	color: #698097;
+	color: #00806d;
 	font-size: 0.72rem;
 	font-weight: 900;
 	text-align: center;
@@ -740,33 +750,39 @@ textarea:focus {
 
 .date-picker-day {
 	aspect-ratio: 1;
-	border: 1px solid transparent;
+	border: 1px solid rgba(0, 127, 186, 0.08);
 	border-radius: 8px;
-	background: #f5f9fc;
+	background:
+		linear-gradient(180deg, rgba(255, 255, 255, 0.95), rgba(232, 247, 251, 0.95)),
+		#f5f9fc;
 	color: #19324b;
 	padding: 0;
 	font-size: 0.82rem;
 	font-weight: 850;
-	box-shadow: none;
+	box-shadow: inset 0 -1px 0 rgba(0, 127, 186, 0.08);
 }
 
 .date-picker-day:hover:not(:disabled) {
-	border-color: #8ccfe8;
-	background: #e9f7ff;
+	border-color: #00a887;
+	background: linear-gradient(135deg, rgba(0, 140, 201, 0.16), rgba(0, 168, 135, 0.16));
+	color: #006c55;
 	filter: none;
+	transform: translateY(-1px);
 }
 
 .date-picker-day.is-selected {
 	border-color: #00a887;
 	background: linear-gradient(135deg, #008cc9, #00a887);
 	color: #ffffff;
+	box-shadow: 0 10px 20px rgba(0, 168, 135, 0.24);
 }
 
 .date-picker-day:disabled {
-	color: #aebbc7;
-	background: #eef3f7;
+	color: #9aacbb;
+	background: rgba(237, 243, 247, 0.72);
 	cursor: not-allowed;
-	opacity: 0.62;
+	opacity: 0.66;
+	box-shadow: none;
 }
 
 .file-field input[type="file"] {
