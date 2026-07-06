@@ -3,8 +3,12 @@ import { APPS_SCRIPT_URL } from './config.js';
 const MAX_FILES = 5;
 const MAX_FILE_SIZE = 20 * 1024 * 1024;
 const MAX_TOTAL_FILE_SIZE = 45 * 1024 * 1024;
+const IMAGE_COMPRESSION_MIN_SIZE = 700 * 1024;
+const IMAGE_COMPRESSION_MAX_SIDE = 1600;
+const IMAGE_COMPRESSION_QUALITY = 0.78;
 const PDF_EXTENSIONS = ['pdf'];
 const IMAGE_EXTENSIONS = ['jpg', 'jpeg', 'png', 'webp', 'gif', 'bmp', 'tif', 'tiff', 'heic', 'heif', 'avif'];
+const COMPRESSIBLE_IMAGE_EXTENSIONS = ['jpg', 'jpeg', 'png', 'webp', 'bmp'];
 
 const form = document.querySelector('#denuncia-form');
 const submitButton = document.querySelector('#denuncia-submit');
@@ -101,6 +105,89 @@ function getMimeType(file) {
 	if (IMAGE_EXTENSIONS.includes(extension)) return `image/${extension === 'jpg' ? 'jpeg' : extension}`;
 
 	return 'application/octet-stream';
+}
+
+function isCompressibleImage(file) {
+	const mimeType = String(file.type || '').toLowerCase();
+	const extension = getFileExtension(file.name);
+
+	return file.size > IMAGE_COMPRESSION_MIN_SIZE && mimeType.startsWith('image/') && COMPRESSIBLE_IMAGE_EXTENSIONS.includes(extension);
+}
+
+function compressedFileName(fileName) {
+	const baseName = String(fileName || 'denuncia')
+		.replace(/\.[^.]+$/, '')
+		.replace(/[\\/:*?"<>|]/g, '-');
+
+	return `${baseName}-optimizada.jpg`;
+}
+
+function canvasToBlob(canvas, type, quality) {
+	return new Promise((resolve) => {
+		canvas.toBlob(resolve, type, quality);
+	});
+}
+
+function loadImage(file) {
+	return new Promise((resolve, reject) => {
+		const url = URL.createObjectURL(file);
+		const image = new Image();
+
+		image.onload = () => {
+			URL.revokeObjectURL(url);
+			resolve(image);
+		};
+
+		image.onerror = () => {
+			URL.revokeObjectURL(url);
+			reject(new Error(`No se pudo optimizar la imagen ${file.name}.`));
+		};
+
+		image.src = url;
+	});
+}
+
+async function compressImageFile(file) {
+	if (!isCompressibleImage(file)) return file;
+
+	try {
+		const image = await loadImage(file);
+		const ratio = Math.min(1, IMAGE_COMPRESSION_MAX_SIDE / Math.max(image.naturalWidth, image.naturalHeight));
+		const width = Math.max(1, Math.round(image.naturalWidth * ratio));
+		const height = Math.max(1, Math.round(image.naturalHeight * ratio));
+		const canvas = document.createElement('canvas');
+		const context = canvas.getContext('2d', { alpha: false });
+
+		if (!context) return file;
+
+		canvas.width = width;
+		canvas.height = height;
+		context.fillStyle = '#ffffff';
+		context.fillRect(0, 0, width, height);
+		context.drawImage(image, 0, 0, width, height);
+
+		const blob = await canvasToBlob(canvas, 'image/jpeg', IMAGE_COMPRESSION_QUALITY);
+
+		if (!blob || blob.size >= file.size) return file;
+
+		return new File([blob], compressedFileName(file.name), {
+			type: 'image/jpeg',
+			lastModified: Date.now(),
+		});
+	} catch (error) {
+		console.warn(error);
+		return file;
+	}
+}
+
+async function prepareFilesForUpload(files) {
+	const preparedFiles = [];
+
+	for (const file of files) {
+		preparedFiles.push(await compressImageFile(file));
+	}
+
+	return preparedFiles;
 }
 
 function getFilesError(files) {
@@ -413,10 +500,11 @@ if (form) {
 
 		submitButton.disabled = true;
 		submitButton.textContent = 'Enviando...';
-		const loadingModal = showLoadingModal('Estamos cargando los archivos y registrando la denuncia.');
+		const loadingModal = showLoadingModal('Estamos optimizando y cargando los archivos de la denuncia.');
 
 		try {
-			const archivos = await Promise.all(files.map(fileToPayload));
+			const preparedFiles = await prepareFilesForUpload(files);
+			const archivos = await Promise.all(preparedFiles.map(fileToPayload));
 			const result = await submitDenuncia({ ...payload, archivos });
 			form.reset();
 			renderFileList([]);
